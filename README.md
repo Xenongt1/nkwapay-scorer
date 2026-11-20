@@ -34,6 +34,19 @@ Enter a loan application and the applicant's earlier loans, or load one of five 
 | Decline | Above 6.2% for an applicant with a repayment record, or any applicant with an earlier unpaid loan. |
 | Refer | Above 6.2% for a first-time applicant (starter loan or human review instead of an automatic no), and every application from outside Kenya. |
 
+### Lending policy and the reviewer step
+
+The model decides the risk; the lending policy (sidebar) decides the money. Changing it needs no retraining and never changes the risk, the decision or the reasons.
+
+| Setting | Default | Meaning |
+|---|---|---|
+| First-loan cap, Kenya | 5,000 KES | Largest first loan; the median repaid first loan in the data. |
+| Starter loan for referrals | 10% | Share of the usual offer suggested for a referred first-time applicant. |
+| First-loan cap, Ghana | not set | A cedi amount must be set before a reviewer can offer a pilot loan. |
+| Maximum per customer | none | For a limit set by the Bank of Ghana (Directive s.3.5(5)). |
+
+Approvals stay automatic. Under a referral, the reviewer step shows a suggested starter amount that is also the ceiling: the reviewer may lower it or decline (0), never raise it, and must give their name and a reason. Each decision is added to a review log that can be downloaded, so reviewers' choices can be checked for consistency. The review is a digital step because the Directive (s.2.3(1)) bars manual approval at a physical office.
+
 The 6.2% comes from a cost matrix: on a GHS 500 loan with an 8% fee, a repaid loan earns about GHS 25 and a default loses about GHS 380, so approving pays only while the chance of default is below 25 / (25 + 380) = 6.2%.
 
 ### Product types
@@ -80,7 +93,7 @@ Python 3.12 or newer.
 
 ```
 app/app.py         the web app
-src/               scoring code shared with the analysis (features, reasons, scoring service)
+src/               scoring code shared with the analysis (features, reasons, scoring service, lending policy)
 models/            the saved model, nkwapay-v1.joblib
 examples/          five made-up applications: approve, decline, earlier unpaid loan, first loan, Ghana
 requirements.txt   packages the app needs (scikit-learn must stay at 1.6.1 to load the saved model)
